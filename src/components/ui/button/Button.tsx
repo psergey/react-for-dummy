@@ -22,11 +22,11 @@ const Button: FC<ButtonProps> = ({
   return (
     <button
       type="button"
-      className={`${classes.btn} ${className({
+      className={className(classes.btn, {
         [classes.disabled]: disabled === true,
         [classes["btn--primary"]]: variant === "primary",
         [classes["btn--secondary"]]: variant === "secondary",
-      })}`}
+      })}
       disabled={disabled}
     >
       {startIcon && (
