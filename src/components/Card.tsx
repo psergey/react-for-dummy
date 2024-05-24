@@ -23,7 +23,7 @@ const Card: FC<CardProps> = ({
       <div className={classes['card-details']}>
         <h2 className={classes['card-title']}>{title}</h2>
         <p className={classes['card-description']}>
-          {text.length > maxTextSize ? text.substring(0, maxTextSize) + '...' : text}
+          {text.length > maxTextSize ? text.substring(0, maxTextSize).trimEnd() + '...' : text}
         </p>
         <div className={classes['cards-tags']}>
           {cardTags.map((item: string) => (
