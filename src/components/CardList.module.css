@@ -1,0 +1,23 @@
+.card-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 6.4rem;
+  row-gap: 9.6rem;
+  height: 100%;
+}
+
+.card-list-item {
+  display: grid;
+}
+
+@media screen and (min-width: 841px) and (max-width: 1280px) {
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4 / 3) {
+  .card-list {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

@@ -1,9 +1,19 @@
 import { FC } from 'react';
 
-import classes from './card.module.css';
+import classes from './Card.module.css';
+import { CardProps } from './Card.types';
 
-const Card: FC<CardProps> = ({ title, image, text, tags, isDragging }): React.ReactElement => {
-  const cardTags: string[] = tags.split(',');
+const MAX_TEXT_LENGTH = 80;
+
+const Card: FC<CardProps> = ({
+  title,
+  image,
+  text,
+  tags,
+  isDragging,
+  maxTextSize = MAX_TEXT_LENGTH,
+}): React.ReactElement => {
+  const cardTags: string[] = tags?.split(',').slice(0, 2) ?? [];
 
   return (
     <div className={`${classes.card} ${isDragging ? classes.dragging : ''}`}>
@@ -12,10 +22,14 @@ const Card: FC<CardProps> = ({ title, image, text, tags, isDragging }): React.Re
       </div>
       <div className={classes['card-details']}>
         <h2 className={classes['card-title']}>{title}</h2>
-        <p className={classes['card-description']}>{text}</p>
+        <p className={classes['card-description']}>
+          {text.length > maxTextSize ? text.substring(0, maxTextSize) + '...' : text}
+        </p>
         <div className={classes['cards-tags']}>
           {cardTags.map((item: string) => (
-            <span className={classes.tag}>{item}</span>
+            <span key={classes.tag} className={classes.tag}>
+              {item}
+            </span>
           ))}
         </div>
       </div>

@@ -1,57 +1,40 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import './App.css';
 import CardList from './components/CardList';
-
-const data = [
-  {
-    id: '1',
-    title: 'Margarita 1',
-    text: 'Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the oute rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass',
-    image: 'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg',
-    tags: 'IBA,ContemporaryClassic',
-  },
-  {
-    id: '2',
-    title: 'Margarita 2',
-    text: 'Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the oute rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass',
-    image: 'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg',
-    tags: 'IBA,ContemporaryClassic',
-  },
-  {
-    id: '3',
-    title: 'Margarita 3',
-    text: 'Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the oute rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass',
-    image: 'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg',
-    tags: 'IBA,ContemporaryClassic',
-  },
-  {
-    id: '4',
-    title: 'Margarita 4',
-    text: 'Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the oute rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass',
-    image: 'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg',
-    tags: 'IBA,ContemporaryClassic',
-  },
-  {
-    id: '5',
-    title: 'Margarita 5',
-    text: 'Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the oute rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass',
-    image: 'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg',
-    tags: 'IBA,ContemporaryClassic',
-  },
-  {
-    id: '6',
-    title: 'Margarita 6',
-    text: 'Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the oute rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass',
-    image: 'https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg',
-    tags: 'IBA,ContemporaryClassic',
-  },
-];
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { CardService } from './services/card';
+import { client } from './services/client';
+import { CardListItemProps } from './components/CardList.types';
 
 const App: FC = (): React.ReactElement => {
+  const [cards, setCards] = useLocalStorage<CardListItemProps[]>('cards', []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const cardService = new CardService(client);
+      const res = await cardService.getCards();
+
+      setCards(
+        res.data.drinks.map((item) => ({
+          id: `${item.idDrink}`,
+          title: item.strDrink,
+          text: item.strInstructions,
+          image: item.strDrinkThumb,
+          tags: item.strTags,
+          rating: 0,
+        }))
+      );
+    }
+
+    if (cards.length === 0) {
+      fetchData();
+    }
+  }, [cards, setCards]);
+
   return (
     <div className="container">
-      <CardList items={data} />
+      <CardList cards={cards} onUpdated={(items) => setCards(items)} />
     </div>
   );
 };
