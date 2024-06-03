@@ -27,10 +27,10 @@ const App: FC = (): React.ReactElement => {
       );
     }
 
-    if (cards.length === 0) {
+    if (cards.length == 0) {
       fetchData();
     }
-  }, [cards, setCards]);
+  }, [cards.length, setCards]);
 
   return (
     <div className="container">

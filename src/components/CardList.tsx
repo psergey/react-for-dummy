@@ -4,9 +4,7 @@ import classes from './CardList.module.css';
 import Card from './Card';
 import Draggable from './Draggable';
 import { CardListItemProps, CardListProps } from './CardList.types';
-import Modal from './Modal';
-import ItemDetails from './ItemDetails';
-import '../utils/array';
+import { swap } from '../utils/array';
 
 const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement => {
   const [dragginItemId, setDragginItemId] = useState('');
@@ -27,12 +25,12 @@ const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement =
   };
 
   const handleDrop = (e: React.DragEvent<HTMLElement>): void => {
-    const srcIndex = cards.findIndex((item) => item.id === dragginItemId);
-    const destIndex = cards.findIndex((item) => item.id === e.currentTarget.id);
+    const startIndex = cards.findIndex((item) => item.id === dragginItemId);
+    const endIndex = cards.findIndex((item) => item.id === e.currentTarget.id);
 
-    if (srcIndex === destIndex) return;
+    if (startIndex === endIndex) return;
 
-    onUpdated(cards.swap(srcIndex, destIndex));
+    onUpdated(swap(cards, startIndex, endIndex));
 
     setDragginItemId('');
     setDragOver('');
@@ -51,47 +49,13 @@ const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement =
           >
             <Card
               key={item.id}
+              id={item.id}
               title={item.title}
               image={item.image}
               text={item.text}
               tags={item.tags}
               isDragging={item.id === dragginItemId}
             />
-
-            {/* <Modal>
-            <Modal.Open
-              opens="card"
-              render={(onClick) => (
-                <div onClick={onClick}>
-                  <Card
-                    key={item.id}
-                    title={item.title}
-                    image={item.image}
-                    text={item.text}
-                    tags={item.tags}
-                    isDragging={item.id === dragginItemId}
-                  />
-                </div>
-              )}
-            ></Modal.Open>
-            <Modal.Window name="card" closeWindow={() => {}}>
-              <ItemDetails
-                {...item}
-                onRate={(rate) =>
-                  setCards(
-                    items.map((el) =>
-                      el.id === item.id
-                        ? {
-                            ...el,
-                            rating: el.rating + rate,
-                          }
-                        : el
-                    )
-                  )
-                }
-              />
-            </Modal.Window>
-          </Modal> */}
           </Draggable>
         </div>
       ))}
