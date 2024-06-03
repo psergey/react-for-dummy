@@ -1,18 +1,18 @@
-import { FC, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 
 import classes from './CardList.module.css';
 import Card from './Card';
 import Draggable from './Draggable';
 import { CardListItemProps, CardListProps } from './CardList.types';
-import { swap } from '../utils/array';
+import { swap } from '@utils/array';
 
 const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement => {
   const [dragginItemId, setDragginItemId] = useState('');
   const [dragOver, setDragOver] = useState('');
 
-  const handleDragStart = (e: React.DragEvent<HTMLElement>): void => {
+  const handleDragStart = useCallback((e: React.DragEvent<HTMLElement>): void => {
     setDragginItemId(e.currentTarget.id);
-  };
+  }, []);
 
   const handleDragOver = (e: React.DragEvent<HTMLElement>): void => {
     e.preventDefault();
