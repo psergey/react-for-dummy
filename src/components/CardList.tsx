@@ -1,14 +1,17 @@
 import { FC, useCallback, useState } from 'react';
 
-import classes from './CardList.module.css';
+import { swap } from '@utils/array';
 import Card from './Card';
 import Draggable from './Draggable';
+import Modal from './Modal';
+import Rate from './Rate';
 import { CardListItemProps, CardListProps } from './CardList.types';
-import { swap } from '@utils/array';
+import classes from './CardList.module.css';
 
 const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement => {
   const [dragginItemId, setDragginItemId] = useState('');
   const [dragOver, setDragOver] = useState('');
+  const [selectedItemId, setSelectedItemId] = useState<string>();
 
   const handleDragStart = useCallback((e: React.DragEvent<HTMLElement>): void => {
     setDragginItemId(e.currentTarget.id);
@@ -36,6 +39,23 @@ const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement =
     setDragOver('');
   };
 
+  const itemClickHandler = (id: string) => {
+    setSelectedItemId(id);
+  };
+
+  const rateSelectedItemHandler = () => {
+    onUpdated(
+      cards.map((item) =>
+        item.id == selectedItemId
+          ? {
+              ...item,
+              rating: item.rating + 1,
+            }
+          : item
+      )
+    );
+  };
+
   return (
     <div className={classes['card-list']}>
       {cards.map((item: CardListItemProps) => (
@@ -55,10 +75,16 @@ const CardList: FC<CardListProps> = ({ cards, onUpdated }): React.ReactElement =
               text={item.text}
               tags={item.tags}
               isDragging={item.id === dragginItemId}
+              onClick={itemClickHandler}
             />
           </Draggable>
         </div>
       ))}
+      {selectedItemId && (
+        <Modal open={!!selectedItemId} onClose={() => setSelectedItemId('')}>
+          <Rate {...cards.find((item) => item.id == selectedItemId)!} onRate={rateSelectedItemHandler} />
+        </Modal>
+      )}
     </div>
   );
 };

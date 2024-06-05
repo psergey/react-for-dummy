@@ -6,4 +6,5 @@ export interface CardProps {
   tags: string;
   isDragging: boolean;
   maxTextSize?: number;
+  onClick(id: string): void;
 }

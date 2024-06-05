@@ -3,11 +3,11 @@ import { FC } from 'react';
 import classes from './Card.module.css';
 import { CardProps } from './Card.types';
 
-const Card: FC<CardProps> = ({ id, title, image, text, tags, isDragging }): React.ReactElement => {
+const Card: FC<CardProps> = ({ id, title, image, text, tags, isDragging, onClick }): React.ReactElement => {
   const cardTags: string[] = tags?.split(',').slice(0, 2) ?? [];
 
   return (
-    <div className={`${classes.card} ${isDragging ? classes.dragging : ''}`}>
+    <div className={`${classes.card} ${isDragging ? classes.dragging : ''}`} onClick={() => onClick(id)}>
       <div className={classes['card-media']}>
         <img src={image} alt={title} />
       </div>

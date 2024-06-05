@@ -1,0 +1,28 @@
+.rate-container {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.rate-container img {
+  max-width: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.rate-container .rate {
+  display: flex;
+  height: 3rem;
+  font-size: 2rem;
+}
+
+.rate {
+  line-height: 2rem;
+}
+
+.rate svg {
+  cursor: pointer;
+}
+
+.rate span {
+  align-content: center;
+}
