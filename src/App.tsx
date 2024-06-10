@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react';
 
 import './App.css';
-import CardList from './components/CardList';
-import { useLocalStorage } from './hooks/useLocalStorage';
-import { CardService } from './services/card';
-import { client } from './services/client';
-import { CardListItemProps } from './components/CardList.types';
+import CardList from '@components/CardList';
+import { CardListItemProps } from '@components/CardList.types';
+import { useLocalStorage } from '@hooks/useLocalStorage';
+import { CardService } from '@services/card';
+import { client } from '@services/client';
 
 const App: FC = (): React.ReactElement => {
   const [cards, setCards] = useLocalStorage<CardListItemProps[]>('cards', []);
